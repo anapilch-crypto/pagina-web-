@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo do Xadrez | Rosa & Branco</title>
     <style>
-        /* --- ESTILOS VISUAIS (CSS) --- */
         :root {
             --primary: #d81b60;       
             --secondary: #f48fb1;     
@@ -47,11 +46,6 @@
             text-decoration: none;
             margin-left: 1.5rem;
             font-weight: bold;
-            transition: opacity 0.3s;
-        }
-
-        nav a:hover {
-            opacity: 0.8;
         }
 
         .container {
@@ -76,25 +70,6 @@
             display: inline-block;
         }
 
-        .pieces-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1rem;
-        }
-
-        .piece-card {
-            background: var(--bg-light);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-left: 5px solid var(--primary);
-        }
-
-        .piece-card h3 {
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-
         .game-area {
             display: flex;
             flex-direction: column;
@@ -113,36 +88,54 @@
             border: 2px solid var(--secondary);
         }
 
-        /* CORREÇÃO DO TABULEIRO: Altura e largura explícitas no grid */
+        /* TABULEIRO FIXO E SEGURO */
         .board {
             display: grid;
-            grid-template-columns: repeat(8, 55px);
-            grid-template-rows: repeat(8, 55px);
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
             width: 440px;
             height: 440px;
             border: 6px solid var(--primary);
             border-radius: 4px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background-color: var(--board-light);
         }
 
-        /* CORREÇÃO DAS CASAS: Forçando exibição do bloco */
         .square {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-size: 2.5rem;
             cursor: pointer;
             user-select: none;
-            width: 55px;
-            height: 55px;
         }
 
-        .light { background-color: var(--board-light); color: #000000; }
-        .dark { background-color: var(--board-dark); color: #ffffff; }
+        /* Cores alternadas das casas mapeadas estaticamente */
+        .board .square:nth-child(8n+1) { background-color: var(--board-light); }
+        .board .square:nth-child(8n+2) { background-color: var(--board-dark); }
+        .board .square:nth-child(8n+3) { background-color: var(--board-light); }
+        .board .square:nth-child(8n+4) { background-color: var(--board-dark); }
+        .board .square:nth-child(8n+5) { background-color: var(--board-light); }
+        .board .square:nth-child(8n+6) { background-color: var(--board-dark); }
+        .board .square:nth-child(8n+7) { background-color: var(--board-light); }
+        .board .square:nth-child(8n+8) { background-color: var(--board-dark); }
+
+        /* Inversão de linhas ímpares do xadrez */
+        .board .square:nth-child(10) , .board .square:nth-child(12) , .board .square:nth-child(14) , .board .square:nth-child(16) ,
+        .board .square:nth-child(26) , .board .square:nth-child(28) , .board .square:nth-child(30) , .board .square:nth-child(32) ,
+        .board .square:nth-child(42) , .board .square:nth-child(44) , .board .square:nth-child(46) , .board .square:nth-child(48) ,
+        .board .square:nth-child(58) , .board .square:nth-child(60) , .board .square:nth-child(62) , .board .square:nth-child(64) {
+            background-color: var(--board-light);
+        }
+        .board .square:nth-child(9) , .board .square:nth-child(11) , .board .square:nth-child(13) , .board .square:nth-child(15) ,
+        .board .square:nth-child(25) , .board .square:nth-child(27) , .board .square:nth-child(29) , .board .square:nth-child(31) ,
+        .board .square:nth-child(41) , .board .square:nth-child(43) , .board .square:nth-child(45) , .board .square:nth-child(47) ,
+        .board .square:nth-child(57) , .board .square:nth-child(59) , .board .square:nth-child(61) , .board .square:nth-child(63) {
+            background-color: var(--board-dark);
+        }
 
         .square.selected {
             background-color: var(--selected) !important;
-            color: #000000 !important;
         }
 
         button {
@@ -154,12 +147,6 @@
             border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
-            transition: transform 0.2s, background 0.3s;
-        }
-
-        button:hover {
-            background-color: #b0124a;
-            transform: scale(1.05);
         }
 
         footer {
@@ -171,17 +158,8 @@
         }
 
         @media (max-width: 480px) {
-            .board {
-                grid-template-columns: repeat(8, 40px);
-                grid-template-rows: repeat(8, 40px);
-                width: 320px;
-                height: 320px;
-            }
-            .square { 
-                width: 40px;
-                height: 40px;
-                font-size: 1.8rem; 
-            }
+            .board { width: 320px; height: 320px; }
+            .square { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -190,120 +168,34 @@
     <header>
         <h1>🌸 Mundo do Xadrez</h1>
         <nav>
-            <a href="#historia">História</a>
-            <a href="#regras">Regras</a>
             <a href="#tabuleiro">Jogar</a>
         </nav>
     </header>
 
     <div class="container">
-        
-        <section id="historia">
-            <h2>Origem e História</h2>
-            <p>O xadrez é um dos jogos mais antigos e populares do mundo, com raízes que remontam à Índia do século VI. Ao longo dos séculos, viajou pela Pérsia e pelo mundo árabe até chegar à Europa, onde suas regras modernas foram consolidadas. Hoje, é reconhecido mundialmente como um esporte que testa a estratégia, a tática e a profundidade intelectual.</p>
-        </section>
-
-        <section id="regras">
-            <h2>Movimento das Peças</h2>
-            <div class="pieces-grid">
-                <div class="piece-card">
-                    <h3>♙ Peão</h3>
-                    <p>Avança 1 casa (ou 2 no primeiro movimento). Captura apenas na diagonal para a frente.</p>
-                </div>
-                <div class="piece-card">
-                    <h3>♘ Cavalo</h3>
-                    <p>Move-se em formato de "L" (duas casas em linha e uma para o lado). Pode pular peças.</p>
-                </div>
-                <div class="piece-card">
-                    <h3>♗ Bispo</h3>
-                    <p>Move-se estritamente em linhas diagonais por quantas casas estiverem livres.</p>
-                </div>
-                <div class="piece-card">
-                    <h3>♖ Torre</h3>
-                    <p>Move-se em linhas retas (horizontais ou verticais) por quantas casas estiverem vazias.</p>
-                </div>
-                <div class="piece-card">
-                    <h3>♕ Dama</h3>
-                    <p>A peça mais poderosa do tabuleiro. Combina os movimentos livres da Torre e do Bispo.</p>
-                </div>
-                <div class="piece-card">
-                    <h3>♔ Rei</h3>
-                    <p>A peça vital. Move-se apenas 1 casa em qualquer direção disponível por turno.</p>
-                </div>
-            </div>
-        </section>
-
         <section id="tabuleiro">
             <h2>Tabuleiro com Regras Reais</h2>
-            <p>Selecione uma peça e clique no destino. O sistema valida os movimentos legais e a alternância de turnos.</p>
+            <p>Selecione uma peça e clique no destino. O sistema valida as regras reais de xadrez.</p>
             
             <div class="game-area">
                 <div class="status-panel">
                     <span id="turnIndicator">Turno: Brancas</span>
                 </div>
-                <div class="board" id="chessBoard"></div>
-                <div class="controls">
-                    <button id="resetBtn" onclick="resetGame()">Reiniciar Partida</button>
-                </div>
-            </div>
-        </section>
-
-    </div>
-
-    <footer>
-        <p>&copy; 2026 Mundo do Xadrez Rosa. Desenvolvido para entusiastas da estratégia.</p>
-    </footer>
-
-    <script>
-        /* --- LÓGICA DO JOGO (JAVASCRIPT SEGURO) --- */
-        let boardState = [
-            ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
-            ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-            ['', '', '', '', '', '', '', ''],
-            ['', '', '', '', '', '', '', ''],
-            ['', '', '', '', '', '', '', ''],
-            ['', '', '', '', '', '', '', ''],
-            ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-            ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
-        ];
-
-        const pieceSymbols = {
-            'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
-            'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙',
-            '': ''
-        };
-
-        let currentTurn = 'W';
-        let selectedSquare = null;
-
-        function createBoardUI() {
-            const boardElement = document.getElementById('chessBoard');
-            if (!boardElement) return;
-            
-            boardElement.innerHTML = '';
-            for (let r = 0; r < 8; r++) {
-                for (let c = 0; c < 8; c++) {
-                    const square = document.createElement('div');
-                    square.className = 'square';
-                    square.classList.add((r + c) % 2 === 0 ? 'light' : 'dark');
-                    square.dataset.row = r;
-                    square.dataset.col = c;
-                    
-                    const piece = boardState[r][c];
-                    square.textContent = pieceSymbols[piece];
-                    
-                    square.addEventListener('click', handleSquareClick);
-                    boardElement.appendChild(square);
-                }
-            }
-        }
-
-        function handleSquareClick(e) {
-            const square = e.currentTarget;
-            const r = parseInt(square.dataset.row);
-            const c = parseInt(square.dataset.col);
-            const piece = boardState[r][c];
-
-            if (selectedSquare) {
-                const fromR = parseInt(selectedSquare.dataset.row);
-
+                
+                <!-- CASAS ESTRUTURADAS DIRETAMENTE NO HTML (SISTEMA ANTIFALHAS) -->
+                <div class="board" id="chessBoard">
+                    <!-- Linha 0 -->
+                    <div class="square" data-row="0" data-col="0">♜</div><div class="square" data-row="0" data-col="1">♞</div><div class="square" data-row="0" data-col="2">♝</div><div class="square" data-row="0" data-col="3">♛</div><div class="square" data-row="0" data-col="4">♚</div><div class="square" data-row="0" data-col="5">♝</div><div class="square" data-row="0" data-col="6">♞</div><div class="square" data-row="0" data-col="7">♜</div>
+                    <!-- Linha 1 -->
+                    <div class="square" data-row="1" data-col="0">♟</div><div class="square" data-row="1" data-col="1">♟</div><div class="square" data-row="1" data-col="2">♟</div><div class="square" data-row="1" data-col="3">♟</div><div class="square" data-row="1" data-col="4">♟</div><div class="square" data-row="1" data-col="5">♟</div><div class="square" data-row="1" data-col="6">♟</div><div class="square" data-row="1" data-col="7">♟</div>
+                    <!-- Linha 2 -->
+                    <div class="square" data-row="2" data-col="0"></div><div class="square" data-row="2" data-col="1"></div><div class="square" data-row="2" data-col="2"></div><div class="square" data-row="2" data-col="3"></div><div class="square" data-row="2" data-col="4"></div><div class="square" data-row="2" data-col="5"></div><div class="square" data-row="2" data-col="6"></div><div class="square" data-row="2" data-col="7"></div>
+                    <!-- Linha 3 -->
+                    <div class="square" data-row="3" data-col="0"></div><div class="square" data-row="3" data-col="1"></div><div class="square" data-row="3" data-col="2"></div><div class="square" data-row="3" data-col="3"></div><div class="square" data-row="3" data-col="4"></div><div class="square" data-row="3" data-col="5"></div><div class="square" data-row="3" data-col="6"></div><div class="square" data-row="3" data-col="7"></div>
+                    <!-- Linha 4 -->
+                    <div class="square" data-row="4" data-col="0"></div><div class="square" data-row="4" data-col="1"></div><div class="square" data-row="4" data-col="2"></div><div class="square" data-row="4" data-col="3"></div><div class="square" data-row="4" data-col="4"></div><div class="square" data-row="4" data-col="5"></div><div class="square" data-row="4" data-col="6"></div><div class="square" data-row="4" data-col="7"></div>
+                    <!-- Linha 5 -->
+                    <div class="square" data-row="5" data-col="0"></div><div class="square" data-row="5" data-col="1"></div><div class="square" data-row="5" data-col="2"></div><div class="square" data-row="5" data-col="3"></div><div class="square" data-row="5" data-col="4"></div><div class="square" data-row="5" data-col="5"></div><div class="square" data-row="5" data-col="6"></div><div class="square" data-row="5" data-col="7"></div>
+                    <!-- Linha 6 -->
+                    <div class="square" data-row="6" data-col="0">♙</div><div class="square" data-row="6" data-col="1">♙</div><div class="square" data-row="6" data-col="2">♙</div><div class="square" data-row="6" data-col="3">♙</div><div class="square" data-row="6" data-col="4">♙</div><div class="square" data-row="6" data-col="5">♙</div><div class="square" data-row="6" data-col="6">♙</div><div class="square" data-row="6" data-col="7">♙</div>
+                    <!-- Linha 7 -->
