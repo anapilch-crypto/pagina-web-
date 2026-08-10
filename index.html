@@ -1,10 +1,178 @@
-# pagina-web-<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo do Xadrez | Rosa & Branco</title>
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* --- ESTILOS VISUAIS (CSS) --- */
+        :root {
+            --primary: #d81b60;       /* Rosa Intenso */
+            --secondary: #f48fb1;     /* Rosa Claro */
+            --bg-light: #fff5f8;      /* Fundo Branco Rosado */
+            --dark: #2c3e50;
+            --board-light: #ffffff;   /* Casas Brancas */
+            --board-dark: #f06292;    /* Casas Rosas */
+            --selected: #f8bbd0;      /* Destaque de Seleção */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(216, 27, 96, 0.2);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(216, 27, 96, 0.05);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .pieces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .piece-card {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .piece-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .status-panel {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            background: white;
+            padding: 0.5rem 2rem;
+            border-radius: 20px;
+            border: 2px solid var(--secondary);
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            width: 440px;
+            height: 440px;
+            border: 6px solid var(--primary);
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .square {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.8rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .light { background-color: var(--board-light); }
+        .dark { background-color: var(--board-dark); color: white; }
+
+        .square.selected {
+            background-color: var(--selected) !important;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        button:hover {
+            background-color: #b0124a;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 480px) {
+            .board {
+                width: 320px;
+                height: 320px;
+            }
+            .square { font-size: 2rem; }
+        }
+    </style>
 </head>
 <body>
 
@@ -19,13 +187,11 @@
 
     <div class="container">
         
-        <!-- SEÇÃO HISTÓRIA -->
         <section id="historia">
             <h2>Origem e História</h2>
             <p>O xadrez é um dos jogos mais antigos e populares do mundo, com raízes que remontam à Índia do século VI. Ao longo dos séculos, viajou pela Pérsia e pelo mundo árabe até chegar à Europa, onde suas regras modernas foram consolidadas. Hoje, é reconhecido mundialmente como um esporte que testa a estratégia, a tática e a profundidade intelectual.</p>
         </section>
 
-        <!-- SEÇÃO REGRAS E PEÇAS -->
         <section id="regras">
             <h2>Movimento das Peças</h2>
             <div class="pieces-grid">
@@ -56,7 +222,6 @@
             </div>
         </section>
 
-        <!-- SEÇÃO JOGO REAL -->
         <section id="tabuleiro">
             <h2>Tabuleiro com Regras Reais</h2>
             <p>Selecione uma peça e clique no destino. O sistema valida os movimentos legais e a alternância de turnos.</p>
@@ -78,4 +243,67 @@
         <p>&copy; 2026 Mundo do Xadrez Rosa. Desenvolvido para entusiastas da estratégia.</p>
     </footer>
 
-    <script src="js/chess.js"></script>
+    <script>
+        /* --- LÓGICA DO JOGO (JAVASCRIPT) --- */
+        let boardState = [
+            ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+            ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+            ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
+        ];
+
+        const pieceSymbols = {
+            'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
+            'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙',
+            '': ''
+        };
+
+        let currentTurn = 'W';
+        let selectedSquare = null;
+        const boardElement = document.getElementById('chessBoard');
+        const turnIndicator = document.getElementById('turnIndicator');
+
+        function initGame() {
+            createBoardUI();
+            document.getElementById('resetBtn').addEventListener('click', resetGame);
+        }
+
+        function createBoardUI() {
+            boardElement.innerHTML = '';
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const square = document.createElement('div');
+                    square.classList.add('square');
+                    square.classList.add((r + c) % 2 === 0 ? 'light' : 'dark');
+                    square.dataset.row = r;
+                    square.dataset.col = c;
+                    
+                    const piece = boardState[r][c];
+                    square.textContent = pieceSymbols[piece];
+                    
+                    square.addEventListener('click', handleSquareClick);
+                    boardElement.appendChild(square);
+                }
+            }
+        }
+
+        function handleSquareClick(e) {
+            const square = e.currentTarget;
+            const r = parseInt(square.dataset.row);
+            const c = parseInt(square.dataset.col);
+            const piece = boardState[r][c];
+
+            if (selectedSquare) {
+                const fromR = parseInt(selectedSquare.dataset.row);
+                const fromC = parseInt(selectedSquare.dataset.col);
+
+                if (fromR === r && fromC === c) {
+                    clearSelection();
+                    return;
+                }
+
+
