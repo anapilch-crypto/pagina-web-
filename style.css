@@ -1,189 +1,105 @@
-:root {
-    --primary: #d81b60;       
-    --secondary: #f48fb1;     
-    --bg-light: #fff5f8;      
-    --dark: #2c3e50;
-    --board-light: #ffffff;   
-    --board-dark: #f06292;    
-    --selected: #ff80ab;      
-}
-
-* {
+/* Configuração Geral */
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background-color: var(--bg-light);
-    color: var(--dark);
-    line-height: 1.6;
-}
-
-header {
-    background-color: var(--primary);
-    color: white;
-    padding: 1rem 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 10px rgba(216, 27, 96, 0.2);
-}
-
-nav button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-left: 1.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    transition: background 0.3s;
-}
-
-nav button:hover, nav button.active {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.container {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-}
-
-.tab-content {
-    display: none;
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(216, 27, 96, 0.05);
-}
-
-.tab-content.active {
-    display: block;
-}
-
-h2 {
-    color: var(--primary);
-    margin-bottom: 1.5rem;
-    border-bottom: 3px solid var(--secondary);
-    padding-bottom: 0.5rem;
-    display: inline-block;
-}
-
-.info-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.card {
-    border: 2px solid var(--secondary);
-    border-radius: 8px;
-    padding: 1.5rem;
-    background: #fff;
-}
-
-.card h3 {
-    color: var(--primary);
-    margin-bottom: 0.8rem;
-}
-
-.card ul {
-    list-style-position: inside;
-    margin-top: 0.5rem;
-}
-
-.game-area {
+    background-color: #fff0f5; /* Fundo Rosa Lavanda bem claro */
+    color: #4a4a4a;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
 }
 
-.status-panel {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--primary);
-    background: white;
-    padding: 0.5rem 2rem;
-    border-radius: 20px;
-    border: 2px solid var(--secondary);
-}
-
-.score-board {
-    display: flex;
-    gap: 1.5rem;
-    width: 100%;
-    max-width: 440px;
-    justify-content: space-between;
-}
-
-.team-panel {
-    background: #fff;
-    border: 2px solid var(--secondary);
-    padding: 0.8rem;
-    border-radius: 8px;
-    flex: 1;
+header {
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    margin-top: 20px;
 }
 
-.team-title {
-    font-weight: bold;
-    color: var(--primary);
-    margin-bottom: 0.3rem;
+header h1 {
+    color: #ff69b4; /* Rosa Choque */
+    margin-bottom: 5px;
 }
 
-.score-display {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.board {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-    width: 440px;
-    height: 440px;
-    border: 6px solid var(--primary);
-    border-radius: 4px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.square {
+.container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    gap: 40px;
+    margin: 20px max(20px, 4%);
+    max-width: 1000px;
+}
+
+/* Customização do Tabuleiro (Rosa e Branco) */
+.white-1e231 {
+    background-color: #ffffff !important; /* Casas Claras: Brancas */
+    color: #ffb6c1 !important;
+}
+
+.black-3c85d {
+    background-color: #ff69b4 !important; /* Casas Escuras: Rosa Choque */
+    color: #ffffff !important;
+}
+
+/* Controles do Jogo */
+.jogo-container {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    font-size: 2.8rem;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.2s;
 }
 
-.square.light { background-color: var(--board-light); }
-.square.dark { background-color: var(--board-dark); }
-
-.square.selected {
-    background-color: var(--selected) !important;
-}
-
-footer {
-    background-color: var(--dark);
-    color: white;
+.controles {
     text-align: center;
-    padding: 1.5rem;
-    margin-top: 4rem;
+    margin-top: 15px;
 }
 
-@media (max-width: 480px) {
-    .board { width: 320px; height: 320px; }
-    .square { font-size: 2rem; }
-    .score-board { flex-direction: column; width: 100%; }
+#btn-reiniciar {
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+#btn-reiniciar:hover {
+    background-color: #ff1493; /* Rosa mais escuro no hover */
+}
+
+#status {
+    font-weight: bold;
+    color: #db7093;
+}
+
+/* Painel de Regras */
+.regras-container {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.15);
+    max-width: 400px;
+}
+
+.regras-container h2 {
+    color: #ff69b4;
+    margin-top: 0;
+    border-bottom: 2px solid #fff0f5;
+    padding-bottom: 10px;
+}
+
+.regras-container ul {
+    list-style: none;
+    padding: 0;
+}
+
+.regras-container li {
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.regras-container span {
+    color: #ff69b4;
+    font-weight: bold;
 }
