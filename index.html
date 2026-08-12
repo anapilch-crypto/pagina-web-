@@ -88,7 +88,41 @@
             border: 2px solid var(--secondary);
         }
 
-        /* TABULEIRO FIXO E SEGURO */
+        /* PAINEL DE PONTUAÇÃO E CONTAGEM */
+        .score-board {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            width: 100%;
+            max-width: 600px;
+            justify-content: space-between;
+        }
+
+        .team-panel {
+            background: white;
+            border: 2px solid var(--secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            flex: 1;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .team-title {
+            font-weight: bold;
+            color: var(--primary);
+            border-bottom: 1px solid var(--secondary);
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.2rem;
+        }
+
+        .piece-count {
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.2rem;
+        }
+
+        /* TABULEIRO FIXO */
         .board {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
@@ -138,17 +172,6 @@
             background-color: var(--selected) !important;
         }
 
-        button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            font-size: 1rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
         footer {
             background-color: var(--dark);
             color: white;
@@ -181,21 +204,33 @@
                 <div class="status-panel">
                     <span id="turnIndicator">Turno: Brancas</span>
                 </div>
+
+                <!-- PAINEL DE CONTAGEM E VALOR DAS PEÇAS -->
+                <div class="score-board">
+                    <div class="team-panel">
+                        <div class="team-title">⚪ Peças Brancas</div>
+                        <div class="piece-count"><span>👑 Rei (Infinito):</span> <span>1</span></div>
+                        <div class="piece-count"><span>📐 Rainha (9 pts):</span> <span>1</span></div>
+                        <div class="piece-count"><span>🏰 Torres (5 pts):</span> <span>2</span></div>
+                        <div class="piece-count"><span>🐴 Cavalos (3 pts):</span> <span>2</span></div>
+                        <div class="piece-count"><span>🔮 Bispos (3 pts):</span> <span>2</span></div>
+                        <div class="piece-count"><span>🛡️ Peões (1 pt):</span> <span>8</span></div>
+                    </div>
+                    <div class="team-panel">
+                        <div class="team-title">⚫ Peças Pretas</div>
+                        <div class="piece-count"><span>👑 Rei (Infinito):</span> <span>1</span></div>
+                        <div class="piece-count"><span>📐 Rainha (9 pts):</span> <span>1</span></div>
+                        <div class="piece-count"><span>🏰 Torres (5 pts):</span> <span>2</span></div>
+                        <div class="piece-count"><span>🐴 Cavalos (3 pts):</span> <span>2</span></div>
+                        <div class="piece-count"><span>🔮 Bispos (3 pts):</span> <span>2</span></div>
+                        <div class="piece-count"><span>🛡️ Peões (1 pt):</span> <span>8</span></div>
+                    </div>
+                </div>
                 
-                <!-- CASAS ESTRUTURADAS DIRETAMENTE NO HTML (SISTEMA ANTIFALHAS) -->
+                <!-- TABULEIRO USANDO FONTES UNICODE (NUNCA QUEBRAM) -->
                 <div class="board" id="chessBoard">
                     <!-- Linha 0 (Pretas - Fundo) -->
                     <div class="square" data-row="0" data-col="0">♜</div><div class="square" data-row="0" data-col="1">♞</div><div class="square" data-row="0" data-col="2">♝</div><div class="square" data-row="0" data-col="3">♛</div><div class="square" data-row="0" data-col="4">♚</div><div class="square" data-row="0" data-col="5">♝</div><div class="square" data-row="0" data-col="6">♞</div><div class="square" data-row="0" data-col="7">♜</div>
                     <!-- Linha 1 (Pretas - Peões) -->
                     <div class="square" data-row="1" data-col="0">♟</div><div class="square" data-row="1" data-col="1">♟</div><div class="square" data-row="1" data-col="2">♟</div><div class="square" data-row="1" data-col="3">♟</div><div class="square" data-row="1" data-col="4">♟</div><div class="square" data-row="1" data-col="5">♟</div><div class="square" data-row="1" data-col="6">♟</div><div class="square" data-row="1" data-col="7">♟</div>
                     <!-- Linha 2 (Vazia) -->
-                    <div class="square" data-row="2" data-col="0"></div><div class="square" data-row="2" data-col="1"></div><div class="square" data-row="2" data-col="2"></div><div class="square" data-row="2" data-col="3"></div><div class="square" data-row="2" data-col="4"></div><div class="square" data-row="2" data-col="5"></div><div class="square" data-row="2" data-col="6"></div><div class="square" data-row="2" data-col="7"></div>
-                    <!-- Linha 3 (Vazia) -->
-                    <div class="square" data-row="3" data-col="0"></div><div class="square" data-row="3" data-col="1"></div><div class="square" data-row="3" data-col="2"></div><div class="square" data-row="3" data-col="3"></div><div class="square" data-row="3" data-col="4"></div><div class="square" data-row="3" data-col="5"></div><div class="square" data-row="3" data-col="6"></div><div class="square" data-row="3" data-col="7"></div>
-                    <!-- Linha 4 (Vazia) -->
-                    <div class="square" data-row="4" data-col="0"></div><div class="square" data-row="4" data-col="1"></div><div class="square" data-row="4" data-col="2"></div><div class="square" data-row="4" data-col="3"></div><div class="square" data-row="4" data-col="4"></div><div class="square" data-row="4" data-col="5"></div><div class="square" data-row="4" data-col="6"></div><div class="square" data-row="4" data-col="7"></div>
-                    <!-- Linha 5 (Vazia) -->
-                    <div class="square" data-row="5" data-col="0"></div><div class="square" data-row="5" data-col="1"></div><div class="square" data-row="5" data-col="2"></div><div class="square" data-row="5" data-col="3"></div><div class="square" data-row="5" data-col="4"></div><div class="square" data-row="5" data-col="5"></div><div class="square" data-row="5" data-col="6"></div><div class="square" data-row="5" data-col="7"></div>
-                    <!-- Linha 6 (Brancas - Peões) -->
-                    <div class="square" data-row="6" data-col="0">♙</div><div class="square" data-row="6" data-col="1">♙</div><div class="square" data-row="6" data-col="2">♙</div><div class="square" data-row="6" data-col="3">♙</div><div class="square" data-row="6" data-col="4">♙</div><div class="square" data-row="6" data-col="5">♙</div><div class="square" data-row="6" data-col="6">♙</div><div class="square" data-row="6" data-col="7">♙</div>
-                    <!-- Linha 7 (Brancas - Fundo) -->
