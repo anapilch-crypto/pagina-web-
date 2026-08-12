@@ -1,140 +1,119 @@
-// --- SISTEMA DE ABAS ---
-function switchTab(tabName) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+// Inicializa o motor de regras (Chess.js) e o tabuleiro (Chessboard.js)
+var board = null;
+var game = new Chess();
+var $status = $('#status');
+
+// Função do Bot para escolher a melhor jogada (Minimax Simples / Captura)
+function calcularMelhorJogada() {
+    var jogadasPossiveis = game.moves({ verbose: true });
     
-    document.getElementById(`tab-${tabName}`).classList.add('active');
-    document.getElementById(`btn-${tabName}`).classList.add('active');
+    // Se não houver jogadas, o jogo acabou
+    if (jogadasPossiveis.length === 0) return null;
+
+    // Tabela de valores das peças
+    var valoresPecas = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 1000 };
+    var melhorJogada = jogadasPossiveis[0];
+    var maiorValorCaptura = -1;
+
+    // O bot procura se pode comer alguma peça e escolhe a de maior valor
+    for (var i = 0; i < jogadasPossiveis.length; i++) {
+        var jogada = jogadasPossiveis[i];
+        if (jogada.captured) {
+            var valor = valoresPecas[jogada.captured];
+            if (valor > maiorValorCaptura) {
+                maiorValorCaptura = valor;
+                melhorJogada = jogada;
+            }
+        }
+    }
+
+    // Se não puder comer nada, escolhe uma jogada aleatória
+    if (maiorValorCaptura === -1) {
+        var indiceAleatorio = Math.floor(Math.random() * jogadasPossiveis.length);
+        melhorJogada = jogadasPossiveis[indiceAleatorio];
+    }
+
+    return melhorJogada;
 }
 
-// --- SISTEMA DO JOGO DE XADREZ ---
-const boardElement = document.getElementById('chessBoard');
-const turnIndicator = document.getElementById('turnIndicator');
-const scoreWhiteElement = document.getElementById('scoreWhite');
-const scoreBlackElement = document.getElementById('scoreBlack');
+// Executa a jogada do Bot (Pretas)
+function fazerJogadaDoBot() {
+    var jogada = calcularMelhorJogada();
+    
+    if (jogada === null) return;
 
-let currentTurn = 'white';
-let selectedSquare = null;
+    game.move({
+        from: jogada.from,
+        to: jogada.to,
+        promotion: 'q' // Sempre promove para Rainha para simplificar
+    });
 
-let scoreWhite = 0;
-let scoreBlack = 0;
+    board.position(game.fen());
+    atualizarStatus();
+}
 
-// Tabela de valores oficiais das peças para o placar
-const pieceValues = {
-    '♙': 1, '♟': 1,
-    '♘': 3, '♞': 3,
-    '♗': 3, '♝': 3,
-    '♖': 5, '♜': 5,
-    '♕': 9, '♛': 9,
-    '♔': 0, '♚': 0
+// Controla o arrastar de peças no tabuleiro
+function onDragStart(source, piece, position, orientation) {
+    // Não permite mexer peças se o jogo acabou ou se for a vez das Pretas (Bot)
+    if (game.game_over()) return false;
+    if (piece.search(/^b/) !== -1) return false;
+}
+
+// Valida o movimento feito pelo jogador humano
+function onDrop(source, target) {
+    var move = game.move({
+        from: source,
+        to: target,
+        promotion: 'q'
+    });
+
+    // Se o movimento for inválido, volta a peça para o lugar original
+    if (move === null) return 'snapback';
+
+    atualizarStatus();
+    
+    // Aguarda 250ms e faz o bot jogar
+    window.setTimeout(fazerJogadaDoBot, 250);
+}
+
+// Atualiza o tabuleiro após animações
+function onSnapEnd() {
+    board.position(game.fen());
+}
+
+// Atualiza o texto de status (Vez de quem, Xeque, Fim de jogo)
+function atualizarStatus() {
+    var statusText = '';
+    var vezDoJogador = game.turn() === 'w' ? 'Brancas (Você)' : 'Pretas (Bot)';
+
+    if (game.in_checkmate()) {
+        statusText = 'Fim de jogo! ' + vezDoJogador + ' sofreu Xeque-Mate.';
+    } else if (game.in_draw()) {
+        statusText = 'Fim de jogo! Empate.';
+    } else {
+        statusText = 'Sua vez! Mexa uma peça branca.';
+        if (game.in_check()) {
+            statusText += ' (Você está em Xeque!)';
+        }
+    }
+
+    $status.html(statusText);
+}
+
+// Configurações do Tabuleiro
+var config = {
+    draggable: true,
+    position: 'start',
+    onDragStart: onDragStart,
+    onDrop: onDrop,
+    onSnapEnd: onSnapEnd
 };
 
-// Estado inicial das peças no tabuleiro
-const initialBoard = [
-    ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'],
-    ['♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟'],
-    ['', '', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '', ''],
-    ['♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙'],
-    ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖']
-];
+board = Chessboard('board', config);
 
-// Descobrir a cor da peça
-function getPieceColor(piece) {
-    if (!piece) return null;
-    return ['♙','♖','♘','♗','♕','♔'].includes(piece) ? 'white' : 'black';
-}
-
-// Montar e renderizar o tabuleiro na tela
-function createBoard() {
-    boardElement.innerHTML = '';
-    for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-            const square = document.createElement('div');
-            square.classList.add('square');
-            
-            // Alternar cores rosa e branco corretamente
-            if ((r + c) % 2 === 0) {
-                square.classList.add('light');
-            } else {
-                square.classList.add('dark');
-            }
-
-            square.dataset.row = r;
-            square.dataset.col = c;
-            square.textContent = initialBoard[r][c];
-
-            square.addEventListener('click', onSquareClick);
-            boardElement.appendChild(square);
-        }
-    }
-}
-
-// Lógica de cliques nas casas do tabuleiro
-function onSquareClick(e) {
-    const square = e.currentTarget;
-    const r = parseInt(square.dataset.row);
-    const c = parseInt(square.dataset.col);
-    const piece = initialBoard[r][c];
-    const pieceColor = getPieceColor(piece);
-
-    // 1. Selecionar uma peça do turno atual
-    if (selectedSquare === null) {
-        if (piece && pieceColor === currentTurn) {
-            selectedSquare = square;
-            square.classList.add('selected');
-        }
-    } 
-    // 2. Mover a peça selecionada para o novo destino escolhido
-    else {
-        const fromRow = parseInt(selectedSquare.dataset.row);
-        const fromCol = parseInt(selectedSquare.dataset.col);
-        const movingPiece = initialBoard[fromRow][fromCol];
-
-        // Cancelar seleção clicando na mesma peça
-        if (fromRow === r && fromCol === c) {
-            selectedSquare.classList.remove('selected');
-            selectedSquare = null;
-            return;
-        }
-
-        // Evitar capturar a própria peça
-        if (piece && getPieceColor(piece) === currentTurn) {
-            selectedSquare.classList.remove('selected');
-            selectedSquare = square;
-            square.classList.add('selected');
-            return;
-        }
-
-        // PROCESSAR CAPTURA E ATUALIZAR PONTUAÇÃO
-        if (piece !== '') {
-            const value = pieceValues[piece] || 0;
-            if (currentTurn === 'white') {
-                scoreWhite += value;
-                scoreWhiteElement.textContent = `${scoreWhite} pts`;
-            } else {
-                scoreBlack += value;
-                scoreBlackElement.textContent = `${scoreBlack} pts`;
-            }
-        }
-
-        // Efetivar movimento na matriz lógica
-        initialBoard[r][c] = movingPiece;
-        initialBoard[fromRow][fromCol] = '';
-
-        // Limpar seleções e atualizar o visual do tabuleiro
-        selectedSquare.classList.remove('selected');
-        selectedSquare = null;
-        createBoard();
-
-        // Alternar o turno do jogador
-        currentTurn = currentTurn === 'white' ? 'black' : 'white';
-        turnIndicator.textContent = `Turno: ${currentTurn === 'white' ? 'Brancas' : 'Pretas'}`;
-    }
-}
-
-// Inicializa o tabuleiro ao carregar a página
-createBoard();
-
+// Botão de reiniciar o jogo
+$('#btn-reiniciar').on('click', function() {
+    game.reset();
+    board.start();
+    $status.html('Jogo reiniciado! Sua vez.');
+});
