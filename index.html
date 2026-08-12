@@ -12,7 +12,7 @@
             --dark: #2c3e50;
             --board-light: #ffffff;   
             --board-dark: #f06292;    
-            --selected: #f8bbd0;      
+            --selected: #ff80ab;      
         }
 
         * {
@@ -41,25 +41,39 @@
             box-shadow: 0 4px 10px rgba(216, 27, 96, 0.2);
         }
 
-        nav a {
+        nav button {
+            background: none;
+            border: none;
             color: white;
-            text-decoration: none;
-            margin-left: 1.5rem;
+            font-size: 1rem;
             font-weight: bold;
+            cursor: pointer;
+            margin-left: 1.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s;
+        }
+
+        nav button:hover, nav button.active {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
 
-        section {
-            margin-bottom: 3rem;
+        .tab-content {
+            display: none;
             background: white;
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(216, 27, 96, 0.05);
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         h2 {
@@ -70,12 +84,36 @@
             display: inline-block;
         }
 
+        /* ESTILOS DA ABA DE INFORMAÇÕES */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            background: #fff;
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .card ul {
+            list-style-position: inside;
+            margin-top: 0.5rem;
+        }
+
+        /* ESTILOS DA ÁREA DO JOGO */
         .game-area {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1.5rem;
-            margin-top: 2rem;
         }
 
         .status-panel {
@@ -88,41 +126,36 @@
             border: 2px solid var(--secondary);
         }
 
-        /* PAINEL DE PONTUAÇÃO E CONTAGEM */
         .score-board {
             display: flex;
-            gap: 2rem;
-            margin-bottom: 1rem;
+            gap: 1.5rem;
             width: 100%;
-            max-width: 600px;
+            max-width: 440px;
             justify-content: space-between;
         }
 
         .team-panel {
-            background: white;
+            background: #fff;
             border: 2px solid var(--secondary);
-            padding: 1rem;
+            padding: 0.8rem;
             border-radius: 8px;
             flex: 1;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
 
         .team-title {
             font-weight: bold;
             color: var(--primary);
-            border-bottom: 1px solid var(--secondary);
-            margin-bottom: 0.5rem;
-            padding-bottom: 0.2rem;
+            margin-bottom: 0.3rem;
         }
 
-        .piece-count {
-            font-size: 0.9rem;
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.2rem;
+        .score-display {
+            font-size: 1.5rem;
+            font-weight: bold;
         }
 
-        /* TABULEIRO FIXO */
+        /* TABULEIRO DE XADREZ */
         .board {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
@@ -132,42 +165,23 @@
             border: 6px solid var(--primary);
             border-radius: 4px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            background-color: var(--board-light);
         }
 
         .square {
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             cursor: pointer;
             user-select: none;
+            transition: background-color 0.2s;
         }
 
-        /* Cores alternadas das casas mapeadas estaticamente */
-        .board .square:nth-child(8n+1) { background-color: var(--board-light); }
-        .board .square:nth-child(8n+2) { background-color: var(--board-dark); }
-        .board .square:nth-child(8n+3) { background-color: var(--board-light); }
-        .board .square:nth-child(8n+4) { background-color: var(--board-dark); }
-        .board .square:nth-child(8n+5) { background-color: var(--board-light); }
-        .board .square:nth-child(8n+6) { background-color: var(--board-dark); }
-        .board .square:nth-child(8n+7) { background-color: var(--board-light); }
-        .board .square:nth-child(8n+8) { background-color: var(--board-dark); }
+        /* Cores Alternadas Clássicas do Xadrez (Rosa e Branco) */
+        .square.light { background-color: var(--board-light); }
+        .square.dark { background-color: var(--board-dark); }
 
-        /* Inversão de linhas ímpares do xadrez */
-        .board .square:nth-child(10) , .board .square:nth-child(12) , .board .square:nth-child(14) , .board .square:nth-child(16) ,
-        .board .square:nth-child(26) , .board .square:nth-child(28) , .board .square:nth-child(30) , .board .square:nth-child(32) ,
-        .board .square:nth-child(42) , .board .square:nth-child(44) , .board .square:nth-child(46) , .board .square:nth-child(48) ,
-        .board .square:nth-child(58) , .board .square:nth-child(60) , .board .square:nth-child(62) , .board .square:nth-child(64) {
-            background-color: var(--board-light);
-        }
-        .board .square:nth-child(9) , .board .square:nth-child(11) , .board .square:nth-child(13) , .board .square:nth-child(15) ,
-        .board .square:nth-child(25) , .board .square:nth-child(27) , .board .square:nth-child(29) , .board .square:nth-child(31) ,
-        .board .square:nth-child(41) , .board .square:nth-child(43) , .board .square:nth-child(45) , .board .square:nth-child(47) ,
-        .board .square:nth-child(57) , .board .square:nth-child(59) , .board .square:nth-child(61) , .board .square:nth-child(63) {
-            background-color: var(--board-dark);
-        }
-
+        /* Destaque de Peça Selecionada */
         .square.selected {
             background-color: var(--selected) !important;
         }
@@ -182,7 +196,8 @@
 
         @media (max-width: 480px) {
             .board { width: 320px; height: 320px; }
-            .square { font-size: 1.8rem; }
+            .square { font-size: 2rem; }
+            .score-board { flex-direction: column; width: 100%; }
         }
     </style>
 </head>
@@ -191,46 +206,114 @@
     <header>
         <h1>🌸 Mundo do Xadrez</h1>
         <nav>
-            <a href="#tabuleiro">Jogar</a>
+            <button onclick="switchTab('info')" id="btn-info" class="active">Informações</button>
+            <button onclick="switchTab('jogar')" id="btn-jogar">Jogar</button>
         </nav>
     </header>
 
     <div class="container">
-        <section id="tabuleiro">
-            <h2>Tabuleiro com Regras Reais</h2>
-            <p>Selecione uma peça e clique no destino. O sistema valida as regras reais de xadrez.</p>
-            
+        
+        <!-- ABA DE INFORMAÇÕES (CAMPEONATOS E CAMPEÕES) -->
+        <div id="tab-info" class="tab-content active">
+            <h2>História e Competições</h2>
+            <div class="info-cards">
+                <div class="card">
+                    <h3>🏆 Grandes Campeonatos</h3>
+                    <p>O xadrez possui competições profissionais disputadas no mundo inteiro:</p>
+                    <ul>
+                        <li><strong>Campeonato Mundial:</strong> O torneio máximo individual.</li>
+                        <li><strong>Torneio de Candidatos:</strong> Define quem desafiará o campeão mundial.</li>
+                        <li><strong>Olimpíada de Xadrez:</strong> Competição global disputada por equipes.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>👑 Campeões Lendários</h3>
+                    <p>Grandes mentes que dominaram os tabuleiros ao longo da história:</p>
+                    <ul>
+                        <li><strong>Garry Kasparov:</strong> Um dos maiores de todos os tempos.</li>
+                        <li><strong>Magnus Carlsen:</strong> Conhecido pela precisão impecável.</li>
+                        <li><strong>Ju Wenjun:</strong> Atual Campeã Mundial Feminina.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA DO JOGO -->
+        <div id="tab-jogar" class="tab-content">
+            <h2>Tabuleiro de Xadrez</h2>
             <div class="game-area">
+                
                 <div class="status-panel">
                     <span id="turnIndicator">Turno: Brancas</span>
                 </div>
 
-                <!-- PAINEL DE CONTAGEM E VALOR DAS PEÇAS -->
+                <!-- PLACAR DE PONTUAÇÃO -->
                 <div class="score-board">
                     <div class="team-panel">
-                        <div class="team-title">⚪ Peças Brancas</div>
-                        <div class="piece-count"><span>👑 Rei (Infinito):</span> <span>1</span></div>
-                        <div class="piece-count"><span>📐 Rainha (9 pts):</span> <span>1</span></div>
-                        <div class="piece-count"><span>🏰 Torres (5 pts):</span> <span>2</span></div>
-                        <div class="piece-count"><span>🐴 Cavalos (3 pts):</span> <span>2</span></div>
-                        <div class="piece-count"><span>🔮 Bispos (3 pts):</span> <span>2</span></div>
-                        <div class="piece-count"><span>🛡️ Peões (1 pt):</span> <span>8</span></div>
+                        <div class="team-title">⚪ Brancas</div>
+                        <div class="score-display" id="scoreWhite">0 pts</div>
                     </div>
                     <div class="team-panel">
-                        <div class="team-title">⚫ Peças Pretas</div>
-                        <div class="piece-count"><span>👑 Rei (Infinito):</span> <span>1</span></div>
-                        <div class="piece-count"><span>📐 Rainha (9 pts):</span> <span>1</span></div>
-                        <div class="piece-count"><span>🏰 Torres (5 pts):</span> <span>2</span></div>
-                        <div class="piece-count"><span>🐴 Cavalos (3 pts):</span> <span>2</span></div>
-                        <div class="piece-count"><span>🔮 Bispos (3 pts):</span> <span>2</span></div>
-                        <div class="piece-count"><span>🛡️ Peões (1 pt):</span> <span>8</span></div>
+                        <div class="team-title">⚫ Pretas</div>
+                        <div class="score-display" id="scoreBlack">0 pts</div>
                     </div>
                 </div>
                 
-                <!-- TABULEIRO USANDO FONTES UNICODE (NUNCA QUEBRAM) -->
-                <div class="board" id="chessBoard">
-                    <!-- Linha 0 (Pretas - Fundo) -->
-                    <div class="square" data-row="0" data-col="0">♜</div><div class="square" data-row="0" data-col="1">♞</div><div class="square" data-row="0" data-col="2">♝</div><div class="square" data-row="0" data-col="3">♛</div><div class="square" data-row="0" data-col="4">♚</div><div class="square" data-row="0" data-col="5">♝</div><div class="square" data-row="0" data-col="6">♞</div><div class="square" data-row="0" data-col="7">♜</div>
-                    <!-- Linha 1 (Pretas - Peões) -->
-                    <div class="square" data-row="1" data-col="0">♟</div><div class="square" data-row="1" data-col="1">♟</div><div class="square" data-row="1" data-col="2">♟</div><div class="square" data-row="1" data-col="3">♟</div><div class="square" data-row="1" data-col="4">♟</div><div class="square" data-row="1" data-col="5">♟</div><div class="square" data-row="1" data-col="6">♟</div><div class="square" data-row="1" data-col="7">♟</div>
-                    <!-- Linha 2 (Vazia) -->
+                <!-- TABULEIRO GERADO PELO JAVASCRIPT -->
+                <div class="board" id="chessBoard"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Mundo do Xadrez. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // --- SISTEMA DE ABAS ---
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            document.getElementById(`btn-${tabName}`).classList.add('active');
+        }
+
+        // --- SISTEMA DO JOGO DE XADREZ ---
+        const boardElement = document.getElementById('chessBoard');
+        const turnIndicator = document.getElementById('turnIndicator');
+        const scoreWhiteElement = document.getElementById('scoreWhite');
+        const scoreBlackElement = document.getElementById('scoreBlack');
+
+        let currentTurn = 'white';
+        let selectedSquare = null;
+
+        let scoreWhite = 0;
+        let scoreBlack = 0;
+
+        // Tabela de valores oficiais das peças para o placar
+        const pieceValues = {
+            '♙': 1, '♟': 1,
+            '♘': 3, '♞': 3,
+            '♗': 3, '♝': 3,
+            '♖': 5, '♜': 5,
+            '♕': 9, '♛': 9,
+            '♔': 0, '♚': 0
+        };
+
+        // Estado inicial das peças no tabuleiro
+        const initialBoard = [
+            ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'],
+            ['♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟'],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙'],
+            ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖']
+        ];
+
+        // Descobrir a cor da peça
+        function getPieceColor(piece) {
+            if (!piece) return null;
