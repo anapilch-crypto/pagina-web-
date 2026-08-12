@@ -3,314 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mundo do Xadrez | Rosa & Branco</title>
-    <style>
-        :root {
-            --primary: #d81b60;       
-            --secondary: #f48fb1;     
-            --bg-light: #fff5f8;      
-            --dark: #2c3e50;
-            --board-light: #ffffff;   
-            --board-dark: #f06292;    
-            --selected: #ff80ab;      
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-light);
-            color: var(--dark);
-            line-height: 1.6;
-        }
-
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(216, 27, 96, 0.2);
-        }
-
-        nav button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-left: 1.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            transition: background 0.3s;
-        }
-
-        nav button:hover, nav button.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .tab-content {
-            display: none;
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(216, 27, 96, 0.05);
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        h2 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            border-bottom: 3px solid var(--secondary);
-            padding-bottom: 0.5rem;
-            display: inline-block;
-        }
-
-        /* ESTILOS DA ABA DE INFORMAÇÕES */
-        .info-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .card {
-            border: 2px solid var(--secondary);
-            border-radius: 8px;
-            padding: 1.5rem;
-            background: #fff;
-        }
-
-        .card h3 {
-            color: var(--primary);
-            margin-bottom: 0.8rem;
-        }
-
-        .card ul {
-            list-style-position: inside;
-            margin-top: 0.5rem;
-        }
-
-        /* ESTILOS DA ÁREA DO JOGO */
-        .game-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .status-panel {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary);
-            background: white;
-            padding: 0.5rem 2rem;
-            border-radius: 20px;
-            border: 2px solid var(--secondary);
-        }
-
-        .score-board {
-            display: flex;
-            gap: 1.5rem;
-            width: 100%;
-            max-width: 440px;
-            justify-content: space-between;
-        }
-
-        .team-panel {
-            background: #fff;
-            border: 2px solid var(--secondary);
-            padding: 0.8rem;
-            border-radius: 8px;
-            flex: 1;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
-
-        .team-title {
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 0.3rem;
-        }
-
-        .score-display {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        /* TABULEIRO DE XADREZ */
-        .board {
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            grid-template-rows: repeat(8, 1fr);
-            width: 440px;
-            height: 440px;
-            border: 6px solid var(--primary);
-            border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .square {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2.8rem;
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.2s;
-        }
-
-        /* Cores Alternadas Clássicas do Xadrez (Rosa e Branco) */
-        .square.light { background-color: var(--board-light); }
-        .square.dark { background-color: var(--board-dark); }
-
-        /* Destaque de Peça Selecionada */
-        .square.selected {
-            background-color: var(--selected) !important;
-        }
-
-        footer {
-            background-color: var(--dark);
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 4rem;
-        }
-
-        @media (max-width: 480px) {
-            .board { width: 320px; height: 320px; }
-            .square { font-size: 2rem; }
-            .score-board { flex-direction: column; width: 100%; }
-        }
-    </style>
+    <title>Xadrez Rosa e Branco</title>
+    <!-- Estilos do Tabuleiro e do Site -->
+    <link rel="stylesheet" href="https://unpkg.com">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
-        <h1>🌸 Mundo do Xadrez</h1>
-        <nav>
-            <button onclick="switchTab('info')" id="btn-info" class="active">Informações</button>
-            <button onclick="switchTab('jogar')" id="btn-jogar">Jogar</button>
-        </nav>
+        <h1>👑 Xadrez Rosa & Branco 👑</h1>
+        <p>Jogue contra o Bot e aprenda as regras!</p>
     </header>
 
-    <div class="container">
-        
-        <!-- ABA DE INFORMAÇÕES (CAMPEONATOS E CAMPEÕES) -->
-        <div id="tab-info" class="tab-content active">
-            <h2>História e Competições</h2>
-            <div class="info-cards">
-                <div class="card">
-                    <h3>🏆 Grandes Campeonatos</h3>
-                    <p>O xadrez possui competições profissionais disputadas no mundo inteiro:</p>
-                    <ul>
-                        <li><strong>Campeonato Mundial:</strong> O torneio máximo individual.</li>
-                        <li><strong>Torneio de Candidatos:</strong> Define quem desafiará o campeão mundial.</li>
-                        <li><strong>Olimpíada de Xadrez:</strong> Competição global disputada por equipes.</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h3>👑 Campeões Lendários</h3>
-                    <p>Grandes mentes que dominaram os tabuleiros ao longo da história:</p>
-                    <ul>
-                        <li><strong>Garry Kasparov:</strong> Um dos maiores de todos os tempos.</li>
-                        <li><strong>Magnus Carlsen:</strong> Conhecido pela precisão impecável.</li>
-                        <li><strong>Ju Wenjun:</strong> Atual Campeã Mundial Feminina.</li>
-                    </ul>
-                </div>
+    <main class="container">
+        <!-- Tabuleiro -->
+        <section class="jogo-container">
+            <div id="board" style="width: 400px; max-width: 100%;"></div>
+            <div class="controles">
+                <button id="btn-reiniciar">Reiniciar Jogo</button>
+                <p id="status">Seu turno! Mexa uma peça branca.</p>
             </div>
-        </div>
+        </section>
 
-        <!-- ABA DO JOGO -->
-        <div id="tab-jogar" class="tab-content">
-            <h2>Tabuleiro de Xadrez</h2>
-            <div class="game-area">
-                
-                <div class="status-panel">
-                    <span id="turnIndicator">Turno: Suas Vez (Brancas)</span>
-                </div>
+        <!-- Seção de Regras -->
+        <section class="regras-container">
+            <h2>📜 Regras Básicas do Xadrez</h2>
+            <ul>
+                <li><strong>Objetivo:</strong> Dar <span>Xeque-Mate</span> no Rei adversário (encurralar o Rei sem saída).</li>
+                <li><strong>Peão:</strong> Anda 1 casa para frente (ou 2 no primeiro movimento). Come na diagonal.</li>
+                <li><strong>Torre:</strong> Anda em linha reta (horizontal ou vertical) quantas casas quiser.</li>
+                <li><strong>Cavalo:</strong> Anda em formato de "L" (duas casas e vira uma). Pula outras peças.</li>
+                <li><strong>Bispo:</strong> Anda apenas nas diagonais quantas casas quiser.</li>
+                <li><strong>Rainha:</strong> A mais poderosa. Anda para qualquer direção (reta ou diagonal).</li>
+                <li><strong>Rei:</strong> Anda apenas 1 casa para qualquer direção. Deve ser protegido a todo custo.</li>
+            </ul>
+        </section>
+    </main>
 
-                <!-- PLACAR DE PONTUAÇÃO -->
-                <div class="score-board">
-                    <div class="team-panel">
-                        <div class="team-title">⚪ Você</div>
-                        <div class="score-display" id="scoreWhite">0 Vitórias</div>
-                    </div>
-                    <div class="team-panel">
-                        <div class="team-title">🤖 Computador</div>
-                        <div class="score-display" id="scoreBlack">0 Vitórias</div>
-                    </div>
-                </div>
-                
-                <!-- TABULEIRO GERADO PELO JAVASCRIPT -->
-                <div class="board" id="chessBoard"></div>
-            </div>
-        </div>
-
-    </div>
-
-    <footer>
-        <p>&copy; 2026 - Mundo do Xadrez. Todos os direitos reservados.</p>
-    </footer>
-
-    <!-- Dependência do Motor de Regras do Xadrez -->
+    <!-- Bibliotecas de Xadrez e Script do Jogo -->
+    <script src="https://jquery.com"></script>
     <script src="https://cloudflare.com"></script>
-    
-    <script>
-        // Sistema de abas do site
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById('tab-' + tabName).classList.add('active');
-            document.getElementById('btn-' + tabName).classList.add('active');
-
-            if (tabName === 'jogar') {
-                reiniciarJogo();
-            }
-        }
-
-        // Lógica do Jogo de Xadrez
-        const chess = new Chess();
-        const boardEl = document.getElementById('chessBoard');
-        const turnIndicator = document.getElementById('turnIndicator');
-        const scoreWhiteEl = document.getElementById('scoreWhite');
-        const scoreBlackEl = document.getElementById('scoreBlack');
-
-        let selectedSquare = null;
-        let vitoriasUsuario = 0;
-        let vitoriasComputador = 0;
-
-        // Mapeamento das peças Unicode para exibição visual
-        const unicodePieces = {
-            'p': { 'w': '♙', 'b': '♟' },
-            'r': { 'w': '♖', 'b': '♜' },
-            'n': { 'w': '♘', 'b': '♞' },
-            'b': { 'w': '♗', 'b': '♝' },
-            'q': { 'w': '♕', 'b': '♛' },
-            'k': { 'w': '♔', 'b': '♚' }
-        };
-
-        function renderBoard() {
-            boardEl.innerHTML = '';
-            const boardState = chess.board();
-
-            for (let row = 0; row < 8; row++) {
-                for (let col = 0; col < 8; col++) {
+    <script src="https://unpkg.com"></script>
+    <script src="script.js"></script>
+</body>
+</html>
